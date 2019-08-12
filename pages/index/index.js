@@ -38,7 +38,8 @@ Page({
     currentCard: null,
     showCard: false,
     adUnitId: 'adunit-facea3e23a0fe01f',
-    addCardArray: []
+    addCardArray: [],
+    debug: true
   },
   onLoad: function () {
     let that = this;
@@ -177,7 +178,8 @@ Page({
       app.getCode().then(code => {
         let that = this;
         let _data = { biz: this.data.biz, code: code };
-        console.log("首页数据 indexDataFn->", _data)
+        let _t = new Date().getTime();
+        if (this.data.debug) console.log("indexDataFn 获取首页数据->", _data)
         wx.request({
           url: `${origin.festival}/front/lottery/indexData`,
           method: 'POST',
@@ -186,7 +188,7 @@ Page({
           },
           data: _data,
           success: function (res) {
-            console.log("首页数据 indexDataFn<-", res)
+            if (that.data.debug) console.log("indexDataFn 获取首页数据<-", (new Date().getTime() - _t) / 1000, res)
             if (res.data.code === 'F_000000') {
               let datas = res.data.data;
               if (datas == null) { console.error('data is null'); return }
@@ -201,6 +203,7 @@ Page({
                 let o = myZongzi[key];
                 myZongziArr[o.index - 1] = o;
               }
+              datas.thanksCardAllTimes = 3;
               // console.log(myZongziArr)
               that.setData({
                 indexData: datas,
@@ -210,9 +213,6 @@ Page({
                 myZongziArr: myZongziArr,
                 myZongziLength: myZongziLength
               })
-              // 获取添加贺卡数组
-              let addCardArray = Array(datas.thanksCardAllTimes - datas.thanksCardUsedTimes);
-              that.setData({ addCardArray: addCardArray })
               // 获取已填写好的贺卡
               that.getCardList()
               resolve(myZongziLength);
@@ -569,7 +569,7 @@ Page({
   withDrawFn(e) {
     if (!this.isAvili({ start: '2019/06/01', end: '2019/08/13', beTitle: '', beContent: '活动未开始', afTitle: '提现功能已关闭', afContent: '感谢您对七夕节的支持' })) {
       return
-    };
+    }
     let formId = e.detail.formId,
       that = this;
     wx.showToast({
@@ -768,6 +768,13 @@ Page({
   saveCard(e) {
     app.getCode().then(code => {
       let _data = e.detail.value;
+      if (!_data.name || !_data.school || !_data.content || !_data.teacherPhone) {
+        wx.showToast({
+          title: '必须全部填写哦',
+          icon: 'none',
+        })
+        return;
+      }
       _data.code = code;
       _data.biz = this.data.biz
       let _this = this
@@ -786,7 +793,7 @@ Page({
           if (res.data.code === 'F_000000') {
             // let cards = res.data.data;
             // that.setData({ cards: cards })
-            _this.setData({showCard:false})
+            _this.setData({ showCard: false })
             _this.indexDataFn();
           } else {
             wx.showModal({
@@ -809,15 +816,24 @@ Page({
   getCardList() {
     app.getCode().then((code) => {
       let _data = { code: code, biz: this.data.biz }, that = this;
-      console.log("获取贺卡列表 getCardList -> ", _data);
+      if (this.data.debug) console.log("获取贺卡列表 getCardList -> ", _data);
+      let _t = new Date().getTime();
       wx.request({
         url: `${origin.festival}/front/duolabao/TeachersDay/queryList`,
         data: _data,
         success: function (res) {
-          console.log("获取贺卡列表 getCardList <- ", res);
+          if (that.data.debug) console.log("获取贺卡列表 getCardList <- ", (new Date().getTime() - _t) / 1000, res);
           if (res.data.code === 'F_000000') {
             let cards = res.data.data;
             that.setData({ cards: cards })
+            let addCardTimes = (that.data.indexData.thanksCardAllTimes - that.data.indexData.thanksCardUsedTimes)
+            let addCardLeft = 3 - cards.length;
+            let addCardArrayLength = 0;
+            if (cards && addCardLeft > 0) {
+              addCardArrayLength = addCardTimes > addCardLeft ? addCardLeft : addCardTimes;
+            }
+            // 获取添加贺卡数组
+            that.setData({ addCardArray: Array(addCardArrayLength) })
           } else {
             console.error(res);
             // wx.showModal({

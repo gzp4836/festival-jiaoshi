@@ -1,15 +1,15 @@
 <view class="bg">
   <!-- 头部图 -->
   <view class="ahead">
-    <image class="ahead-img" src="https://hsp.jdpay.com/?appid=88&filepath=/front/ahead.png&auth=UUDgnNIWnjPqMhpZQ1jYBb5BHcFhPTg4JmU9MTk2NTAxNTQ1NCZ0PTE1NjUwMTU0NTUmZj00N18xOTA4XzcxOF80Nzcmcj1FUWdXVWZCbnZ3"></image>
+    <image class="ahead-img" src="../../images/ahead.png"></image>
   </view>
   <!-- 钢笔 -->
   <view class="get">
     <image class="get-bg" src="../../images/get-bg.png"></image>
     <image class="get-title" src="../../images/get-title.png"></image>
-    <image class="get-letter" src="../../images/get-letter.png" bindtap='openFn'></image>
+    <image class="get-letter {{(indexData.notOpen||0)!=0?'shaky':''}}" src="../../images/get-letter.png" bindtap='openFn'></image>
     <view class="get-tip" bindtap='openFn'>
-      <text class="get-tip-txt">您还有{{indexData.notOpen||0}}张贺卡没送出</text>
+      <text class="get-tip-txt">您还有{{indexData.notOpen || 0}}张贺卡没送出</text>
       <image class="get-tip-img" src="../../images/get-tip-img.png"></image>
     </view>
     <view class="get-pen" bindtap='openFn'>
@@ -53,7 +53,7 @@
       </button>
     </form>
   </view>
-  <!-- 贺卡列表 -->
+  <!-- 贺卡列表 
   <view wx:for="{{cards}}" wx:key="{{index}}">
     <view class="he" data-index="{{index}}" bindtap="getCardDetail">
       <image class="he-bg" src="../../images/award-bg.png"></image>
@@ -63,30 +63,33 @@
       </view>
       <image class="he-ready" src="../../images/he-ready.png"></image>
     </view>
-  </view>
-  <!-- 添加贺卡 -->
+  </view> -->
+  <!-- 添加贺卡 
   <view class="he" wx:for="{{addCardArray}}" wx:key="{{index}}">
     <image class="he-bg" src="../../images/award-bg.png"></image>
     <image class="he-title" src="../../images/he-title.png"></image>
     <button class="he-btn" loading="{{loading}}" disabled="{{disabled}}" bindtap="addCard">
-      <!-- <image class="he-write" src="../../images/he-write.png"></image> -->
       填写贺卡
     </button>
-    <!-- <image class="he-ready" src="../../images/he-ready.png"></image> -->
+  </view> -->
+  <!-- 活动规则 -->
+  <view bindtap="ruleFn" class="rule">
+    <view>
+      活动规则
+      <image src="../../images/ruleImg.png"></image>
+    </view>
   </view>
   <!-- 底部友情链接 -->
   <view bindtap='toOtherHome' class='minApp'>
     <image src='../../images/min-app.jpg'></image>
   </view>
 </view>
-<!-- 弹框黑屏 -->
-<view class="musk" catchtouchmove="ture" wx:if="{{ showCard||noScissorForm || noZongziForm || freeForm ||  noSilverForms ||congratsGoldForm||congratsSilverForm||congratsGoldFormAgain||congratsGoldFormAgain||congratsSilverFormAgain||collectCompleteForm||ruleForms}}"></view>
-<!-- 贺卡详情 或 添加贺卡-->
-<form bindsubmit="saveCard" report-submit='true'  data-key="{{currentCard.key}}">
-  <view class="cd" wx:if="{{showCard}}" >
+<!-- 贺卡详情 或 添加贺卡 
+<form bindsubmit="saveCard" report-submit='true' data-key="{{currentCard.key}}">
+  <view class="cd" wx:if="{{showCard}}">
     <view class="cd-info">
       <input placeholder="恩师学校" auto-focus value="{{currentCard.school}}" name="school" />
-      <input class="" placeholder="恩师姓名"  value="{{currentCard.name}}" name="name" />
+      <input class="" placeholder="恩师姓名" value="{{currentCard.name}}" name="name" />
       <input class="" maxlength="11" placeholder="恩师电话" type="number" value="{{currentCard.phone}}" name="teacherPhone" />
       <textarea class="cd-word" placeholder="祝福词，记得写上自己是谁哦！" value="{{currentCard.content}}" name="content" />
     </view>
@@ -99,29 +102,31 @@
       </button>
     </view>
   </view>
-</form>
+</form> -->
 <!-- 如何获取钢笔 -->
-<view class="al" wx:if="{{noScissorForm}}">
-  <image class="al-head-img" src="https://hsp.jdpay.com/?appid=88&filepath=/front/al-head.png&auth=dAdlEb6WC79yXMSkeHeO9KJ26hFhPTg4JmU9MTk2NTAxNTU2MSZ0PTE1NjUwMTU1NjImZj00N18xOTA4XzcxOF81MjQmcj1yR2pCRWEyNEI3"></image>
-  <view class="al-con">
-    <image class="al-con-img" src="https://hsp.jdpay.com/?appid=88&filepath=/front/al-pen-jin.png&auth=Gn+kxiM5cynQME492qJUZSGEXqFhPTg4JmU9MTk2NTAxNTYwNiZ0PTE1NjUwMTU2MDcmZj01MF8xOTA4XzcyMF80MCZyPW1uS0RzUkRmakY="></image>
-    <text class="al-con-txt">和金刚笔一起送，抢现金红包</text>
-  </view>
-  <view class="al-con">
-    <image class="al-con-img" src="https://hsp.jdpay.com/?appid=88&filepath=/front/al-pen-yin.png&auth=AFOsXymrk1EYOmU+OfDHr4Atq5hhPTg4JmU9MTk2NTAxNTY0MyZ0PTE1NjUwMTU2NDQmZj00NF8xOTA4XzcyM180MiZyPXBvMTFhbW9ETUo="></image>
-    <text class="al-con-txt">和银钢笔一起送，只加一次贺卡填写机会</text>
-  </view>
-  <view class="al-btn">
-    <form bindsubmit="goldFn" report-submit='true'>
-      <button class="al-btn-jin" loading="{{loading}}" disabled="{{disabled}}" form-type="submit">
-        金刚笔
-      </button>
-    </form>
-    <form bindsubmit="silverFn" report-submit='true'>
-      <button class="al-btn-yin" loading="{{loading}}" disabled="{{disabled}}" form-type="submit">
-        银钢笔
-      </button>
-    </form>
+<view class="mask" catchtouchmove="ture" wx:if="{{noScissorForm}}">
+  <view class="al">
+    <image class="al-head-img" src="../../images/al-head.png"></image>
+    <view class="al-con">
+      <image class="al-con-img" src="../../images/al-pen-jin.png"></image>
+      <text class="al-con-txt">和金刚笔一起送，抢现金红包</text>
+    </view>
+    <view class="al-con">
+      <image class="al-con-img" src="../../images/al-pen-yin.png"></image>
+      <text class="al-con-txt">和银钢笔一起送，只加一次写贺卡</text>
+    </view>
+    <view class="al-btn">
+      <form bindsubmit="goldFn" report-submit='true'>
+        <button class="al-btn-jin" loading="{{loading}}" disabled="{{disabled}}" form-type="submit">
+          金刚笔
+        </button>
+      </form>
+      <form bindsubmit="silverFn" report-submit='true'>
+        <button class="al-btn-yin" loading="{{loading}}" disabled="{{disabled}}" form-type="submit">
+          银钢笔
+        </button>
+      </form>
+    </view>
   </view>
 </view>
 <!-- 通用弹框 -->
@@ -144,178 +149,196 @@
   </view>
 </view> -->
 <!-- 送好友贺卡 -->
-<view class="al" wx:if="{{noZongziForm}}">
-  <image class="alv-head-img" src="../../images/alv-head.png"></image>
-  <view class="alv-con">
-    <text class="alv-con-txt">将贺卡送给两名好友，两名好友成功送出贺卡，即可获得一个新礼盒。</text>
-  </view>
-  <view class="alv-btn">
-    <button class="alv-btn-mai" loading="{{loading}}" disabled="{{disabled}}" open-type='share'>
-      送贺卡
-    </button>
-    <button class="alv-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='closeForm'>
-      放弃
-    </button>
+<view class="mask" catchtouchmove="ture" wx:if="{{noZongziForm}}">
+  <view class="al">
+    <image class="alv-head-img" src="../../images/alv-head.png"></image>
+    <view class="alv-con">
+      <text class="alv-con-txt">将贺卡送给两名好友，两名好友成功送出贺卡，即可获得一个新礼盒。</text>
+    </view>
+    <view class="alv-btn">
+      <button class="alv-btn-mai" loading="{{loading}}" disabled="{{disabled}}" open-type='share'>
+        送贺卡
+      </button>
+      <button class="alv-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='closeForm'>
+        放弃
+      </button>
+    </view>
   </view>
 </view>
 <!-- 送花 -->
-<view class="al" wx:if="{{freeForm}}">
-  <view class="alc-head">
-    <text class="alc-head-txt"></text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">只需1分押金，即可送花一次，送出后自动退款（退款需24小时）</view>
-  <view class="alv-btn">
-    <button class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}" bindtap='getGoldFn'>
-      送花
-    </button>
-    <button class="alc-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='closeForm'>
-      放弃
-    </button>
+<view class="mask" catchtouchmove="ture" wx:if="{{freeForm}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt"></text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">只需1分押金，即可送花一次，送出后自动退款（退款需24小时）</view>
+    <view class="alv-btn">
+      <button class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}" bindtap='getGoldFn'>
+        送花
+      </button>
+      <button class="alc-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='closeForm'>
+        放弃
+      </button>
+    </view>
   </view>
 </view>
 <!-- 看广告提示 -->
-<view class="al" wx:if="{{noSilverForms}}">
-  <view class="alc-head">
-    <text class="alc-head-txt"></text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">
-    <text>落红不是无情物，</text>
-    <text>化作春泥更护花。</text>
-    <text>(何况还要看广告)</text>
-  </view>
-  <view class="alv-btn">
-    <button class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}" bindtap='getGoldFn'>
-      换金刚笔
-    </button>
-    <button class="alc-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='watchVideo'>
-      坚持就用银钢笔
-    </button>
+<view class="mask" catchtouchmove="ture" wx:if="{{noSilverForms}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt"></text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">
+      <text>落红不是无情物，</text>
+      <text>化作春泥更护花。</text>
+      <text>(何况还要看广告)</text>
+    </view>
+    <view class="alv-btn">
+      <button class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}" bindtap='getGoldFn'>
+        换金刚笔
+      </button>
+      <button class="alc-btn-sec" loading="{{loading}}" disabled="{{disabled}}" bindtap='watchVideo'>
+        坚持就用银钢笔
+      </button>
+    </view>
   </view>
 </view>
 <!-- 获得金刚笔 -->
-<view class="al" wx:if="{{congratsGoldForm}}">
-  <view class="alc-head">
-    <text class="alc-head-txt">恭喜获得金刚笔</text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">每次送贺卡都能获得现金红包</view>
-  <view class="alv-btn">
-    <form bindsubmit="peelGoldFn" report-submit='true'>
-      <button form-type="submit" data-property='gold' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-        送贺卡
-      </button>
-    </form>
+<view class="mask" catchtouchmove="ture" wx:if="{{congratsGoldForm}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt">恭喜获得金刚笔</text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">每次送贺卡都能获得现金红包</view>
+    <view class="alv-btn">
+      <form bindsubmit="peelGoldFn" report-submit='true'>
+        <button form-type="submit" data-property='gold' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
+          送贺卡
+        </button>
+      </form>
+    </view>
   </view>
 </view>
 <!-- 获得银钢笔 -->
-<view class="al" wx:if="{{congratsSilverForm}}">
-  <view class="alc-head">
-    <text class="alc-head-txt">恭喜获得银钢笔</text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">看视频辛苦了</view>
-  <view class="alv-btn">
-    <form bindsubmit="peelGoldFn" report-submit='true'>
-      <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-        送贺卡
-      </button>
-    </form>
+<view class="mask" catchtouchmove="ture" wx:if="{{congratsSilverForm}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt">恭喜获得银钢笔</text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">看视频辛苦了</view>
+    <view class="alv-btn">
+      <form bindsubmit="peelGoldFn" report-submit='true'>
+        <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
+          送贺卡
+        </button>
+      </form>
+    </view>
   </view>
 </view>
 <!-- 获得金刚笔奖励 -->
-<view class="al" wx:if="{{congratsGoldFormAgain}}">
-  <view class="alc-head">
-    <text class="alc-head-txt">恭喜获得奖励</text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">获得{{zongziData.bonus/100}}元现金</view>
-  <text style="font-size:32rpx">{{zongziData.name}}</text>
-  <view class="alv-btn">
-    <form bindsubmit="peelGoldFn" report-submit='true'>
-      <button form-type="submit" data-property='gold' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-        再送一个
-      </button>
-    </form>
+<view class="mask" catchtouchmove="ture" wx:if="{{congratsGoldFormAgain}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt">恭喜获得奖励</text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">获得{{zongziData.bonus/100}}元现金</view>
+    <text style="font-size:32rpx">{{zongziData.name}}</text>
+    <view class="alv-btn">
+      <form bindsubmit="peelGoldFn" report-submit='true'>
+        <button form-type="submit" data-property='gold' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
+          再送一个
+        </button>
+      </form>
+    </view>
   </view>
 </view>
 <!-- 获得银刚笔奖励 -->
-<view class="al" wx:if="{{congratsSilverFormAgain}}">
-  <view class="alc-head">
-    <text class="alc-head-txt">获得奖励</text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">{{zongziData.name}}</view>
-  <view class="alv-btn">
-    <form bindsubmit="peelGoldFn" report-submit='true'>
-      <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-        再送一个
-      </button>
-    </form>
+<view class="mask" catchtouchmove="ture" wx:if="{{congratsSilverFormAgain}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt">获得奖励</text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">{{zongziData.name}}</view>
+    <view class="alv-btn">
+      <form bindsubmit="peelGoldFn" report-submit='true'>
+        <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
+          再送一个
+        </button>
+      </form>
+    </view>
   </view>
 </view>
 <!-- 奖品集齐 -->
-<view class="al" wx:if="{{collectCompleteForm}}">
-  <view class="alc-head">
-    <text class="alc-head-txt"></text>
-    <image class="alc-head-img" src="../../images/alc-head.png"></image>
-  </view>
-  <view class="alc-con">
-    <text>新竹高于旧竹枝，</text>
-    <text>全凭老干为扶持，</text>
-    <text>下年再有新生者，</text>
-    <text>十丈龙孙绕凤池。</text>
-    <text>（5元学习津贴已到账）</text>
-  </view>
-  <view class="alv-btn">
-    <!-- <form bindsubmit="peelGoldFn" report-submit='true'>
+<view class="mask" catchtouchmove="ture" wx:if="{{collectCompleteForm}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt"></text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">
+      <text>新竹高于旧竹枝，</text>
+      <text>全凭老干为扶持，</text>
+      <text>下年再有新生者，</text>
+      <text>十丈龙孙绕凤池。</text>
+      <text>（5元学习津贴已到账）</text>
+    </view>
+    <view class="alv-btn">
+      <!-- <form bindsubmit="peelGoldFn" report-submit='true'>
       <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
         再送一个
       </button>
     </form> -->
-    <button bindtap='closeForm' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-      感谢您对教师节的支持
-    </button>
+      <button bindtap='closeForm' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
+        感谢您对教师节的支持
+      </button>
+    </view>
   </view>
 </view>
 <!-- 活动规则 -->
-<view class='al' wx:if="{{ruleForms}}">
-  <view class='regulation'>
-    <view class='ruleTitle'>
-      七夕表白七千万活动规则
-      <image src='../../images/delPic.png' bindtap='ruleFn'></image>
-    </view>
-    <view class='ruleMse'>
-      <view>一、活动时间：</view>
-      <view>2019年7月10日-8月10日（以下简称活动期间）</view>
-      <view>二、活动对象：</view>
-      <view>全体微信用户</view>
-      <view>三、活动内容：</view>
-      <view>活动期间，用户通过指定页面参与，领取福袋，每个福袋可获得任意一种福字，集齐八个福字兑换7元现金红包，可提现到微信零钱，福袋数量有限，先到先得。</view>
-      <view>四、活动规则</view>
-      <view>
-        <text>
-          1.每个用户首个福袋免费，同一手机号、身份证号、终端设备等与用户相关的信息，其中任意一项或者多项存在相同、相似或非真实有效等情况的，均可能被认定为同一用户，按照活动规则中的同一用户处理。
+<view class="mask" catchtouchmove="ture" wx:if="{{ruleForms}}">
+  <view class='al'>
+    <view class='regulation'>
+      <view class='ruleTitle'>
+        七夕表白七千万活动规则
+        <image src='../../images/delPic.png' bindtap='ruleFn'></image>
+      </view>
+      <view class='ruleMse'>
+        <view>一、活动时间：</view>
+        <view>2019年7月10日-8月10日（以下简称活动期间）</view>
+        <view>二、活动对象：</view>
+        <view>全体微信用户</view>
+        <view>三、活动内容：</view>
+        <view>活动期间，用户通过指定页面参与，领取福袋，每个福袋可获得任意一种福字，集齐八个福字兑换7元现金红包，可提现到微信零钱，福袋数量有限，先到先得。</view>
+        <view>四、活动规则</view>
+        <view>
+          <text>
+            1.每个用户首个福袋免费，同一手机号、身份证号、终端设备等与用户相关的信息，其中任意一项或者多项存在相同、相似或非真实有效等情况的，均可能被认定为同一用户，按照活动规则中的同一用户处理。
 2.用户活动期间可以选择使用金剪刀开福袋，每次可获得一种福字与金额在0.1-88元不等的现金红包，金剪刀获得方式为免费，每日支付0.01元押金即可再当日24点前无限次数使用，押金24小时后自动原路退款。
 3.用户活动期间可以选择使用银剪刀开福袋，每次可获得一种福字，银剪刀获得方式为观看视频广告，每次需使用1个银剪刀开启一个福袋，每天最多获取5个银剪刀。
 4.用户活动期间获得的所有现金奖励均可提现到微信零钱（此活动与微信官方无关），每次提现最低0.3元，最高100元，每人每天提现次数上限10次，最多提现100元。
-          <text style='font-size:30rpx;color:red;'>
-            微信规定小程序每日发奖上限30万元，若当日因到达上限而提现失败，您可在24点微信更新额度后正常提现。
-          </text>
-          5.如用户以参与营销活动或使用营销工具所获得的相应奖励进行盈利或非法获利，或者小程序实际运营者有合理理由怀疑用户存在不当使用优惠工具或优惠权益的，小程序实际运营者将取消用户的参与资格，并有权撤销相关违规交易、回收相应奖励（含已使用及未使用的）必要时将追究用户法律责任。 
+            <text style='font-size:30rpx;color:red;'>
+              微信规定小程序每日发奖上限30万元，若当日因到达上限而提现失败，您可在24点微信更新额度后正常提现。
+            </text>
+            5.如用户以参与营销活动或使用营销工具所获得的相应奖励进行盈利或非法获利，或者小程序实际运营者有合理理由怀疑用户存在不当使用优惠工具或优惠权益的，小程序实际运营者将取消用户的参与资格，并有权撤销相关违规交易、回收相应奖励（含已使用及未使用的）必要时将追究用户法律责任。 
 6.如用户曾经存在、出现或合理怀疑存在违背诚实信用原则的行为，用户将可能面临无法获取/使用奖励、仅可获取/使用部分奖励的情况，必要时将追究用户的法律责任。具体如下： 
 （1）通过不正当手段或以违反诚实信用原则的方式参与活动的，如通过其他用户，串通或录用机器等方式进行作弊、刷取活动道具或积分等扰乱活动秩序的行为；
 （2）通过任何不正当手段或以违反诚实信用原则的方式达成交易的，如利用秒杀器等工具下单，套取利差，虚假下单交易，提供虚假交易信息等扰乱活动秩序、违反交易规则的行为； 
 （3）其他违反诚实信用原则的行为。 
 7.如出现不可抗力或情势变更的情况（包括但不限于重大灾害事件、活动受政府机关指令需要停止举办或调整的、活动遭受严重网络攻击或因系统故障需要暂停举办的），小程序实际运营者有权暂停或取消本次活动，并可依相关法律法规的规定主张免责。 
 8，如对活动规则有疑问，请联系在线客服，路径如下：
-          <text style='font-size:30rpx;color:red;'>
-            点击关闭按钮旁三个点的菜单按钮→选择反馈与投诉→选择功能异常→选择咨询内容，既有专属客服一对一服务。
-          </text>
-          【苹果免责声明】： 1.本次活动与Apple.Inc无关。 2.苹果公司不是本活动的赞助商且没有以任何形式参与活动。 3.本活动仅限17岁以上用户参加。
+            <text style='font-size:30rpx;color:red;'>
+              点击关闭按钮旁三个点的菜单按钮→选择反馈与投诉→选择功能异常→选择咨询内容，既有专属客服一对一服务。
+            </text>
+            【苹果免责声明】： 1.本次活动与Apple.Inc无关。 2.苹果公司不是本活动的赞助商且没有以任何形式参与活动。 3.本活动仅限17岁以上用户参加。
         最后祝您七夕快乐
-        </text>
+          </text>
+        </view>
       </view>
     </view>
   </view>
