@@ -53,7 +53,7 @@
       </button>
     </form>
   </view>
-  <!-- 贺卡列表 
+  <!-- 贺卡列表 -->
   <view wx:for="{{cards}}" wx:key="{{index}}">
     <view class="he" data-index="{{index}}" bindtap="getCardDetail">
       <image class="he-bg" src="../../images/award-bg.png"></image>
@@ -63,15 +63,15 @@
       </view>
       <image class="he-ready" src="../../images/he-ready.png"></image>
     </view>
-  </view> -->
-  <!-- 添加贺卡 
+  </view>
+  <!-- 添加贺卡 -->
   <view class="he" wx:for="{{addCardArray}}" wx:key="{{index}}">
     <image class="he-bg" src="../../images/award-bg.png"></image>
     <image class="he-title" src="../../images/he-title.png"></image>
     <button class="he-btn" loading="{{loading}}" disabled="{{disabled}}" bindtap="addCard">
       填写贺卡
     </button>
-  </view> -->
+  </view>
   <!-- 活动规则 -->
   <view bindtap="ruleFn" class="rule">
     <view>
@@ -84,7 +84,29 @@
     <image src='../../images/min-app.jpg'></image>
   </view>
 </view>
-<!-- 贺卡详情 或 添加贺卡 
+<!-- 通用弹框 -->
+<view class="mask" catchtouchmove="ture" wx:if="{{clert.show}}">
+  <view class="al">
+    <view class="alc-head">
+      <text class="alc-head-txt">{{clert.title}}</text>
+      <image class="alc-head-img" src="../../images/alc-head.png"></image>
+    </view>
+    <view class="alc-con">
+      <text>{{clert.content}}</text>
+    </view>
+    <view class="alv-btn" wx:for="{{clert.btns}}" wx:key="{{index}}">
+      <form wx:if="{{item.getformId}}" bindsubmit="{{fnName}}" report-submit='true'>
+        <button form-type="submit" data-property='silver' class="{{item.class}}" loading="{{loading}}" disabled="{{disabled}}">
+          {{item.btnTxt}}
+        </button>
+      </form>
+      <button wx:else class="{{item.class}}" loading="{{loading}}" disabled="{{disabled}}" data-fn="{{item.fn}}" bindtap='{{item.fnName}}' open-type='{{item.share}}'>
+        {{item.btnTxt}}
+      </button>
+    </view>
+  </view>
+</view>
+<!-- 贺卡详情 或 添加贺卡 -->
 <form bindsubmit="saveCard" report-submit='true' data-key="{{currentCard.key}}">
   <view class="cd" wx:if="{{showCard}}">
     <view class="cd-info">
@@ -97,12 +119,12 @@
       <button class="al-btn-jin" loading="{{loading}}" disabled="{{disabled}}" form-type="submit">
         确认
       </button>
-      <button class="al-btn-yin" loading="{{loading}}" disabled="{{disabled}}" bindtap="closeCard">
+      <button class="al-btn-yin" loading="{{loading}}" disabled="{{disabled}}" bindtap="toggleCard">
         放弃
       </button>
     </view>
   </view>
-</form> -->
+</form> 
 <!-- 如何获取钢笔 -->
 <view class="mask" catchtouchmove="ture" wx:if="{{noScissorForm}}">
   <view class="al">
@@ -148,7 +170,7 @@
     </button>
   </view>
 </view> -->
-<!-- 送好友贺卡 -->
+<!-- 送好友贺卡  已转通用弹框
 <view class="mask" catchtouchmove="ture" wx:if="{{noZongziForm}}">
   <view class="al">
     <image class="alv-head-img" src="../../images/alv-head.png"></image>
@@ -164,8 +186,8 @@
       </button>
     </view>
   </view>
-</view>
-<!-- 送花 -->
+</view> -->
+<!-- 送花  已转通用弹框
 <view class="mask" catchtouchmove="ture" wx:if="{{freeForm}}">
   <view class="al">
     <view class="alc-head">
@@ -182,8 +204,8 @@
       </button>
     </view>
   </view>
-</view>
-<!-- 看广告提示 -->
+</view> -->
+<!-- 看广告提示  已转通用弹框
 <view class="mask" catchtouchmove="ture" wx:if="{{noSilverForms}}">
   <view class="al">
     <view class="alc-head">
@@ -204,8 +226,8 @@
       </button>
     </view>
   </view>
-</view>
-<!-- 获得金刚笔 -->
+</view> -->
+<!-- 获得金刚笔 
 <view class="mask" catchtouchmove="ture" wx:if="{{congratsGoldForm}}">
   <view class="al">
     <view class="alc-head">
@@ -221,8 +243,8 @@
       </form>
     </view>
   </view>
-</view>
-<!-- 获得银钢笔 -->
+</view> -->
+<!-- 获得银钢笔 
 <view class="mask" catchtouchmove="ture" wx:if="{{congratsSilverForm}}">
   <view class="al">
     <view class="alc-head">
@@ -238,8 +260,8 @@
       </form>
     </view>
   </view>
-</view>
-<!-- 获得金刚笔奖励 -->
+</view> -->
+<!-- 获得金刚笔奖励 
 <view class="mask" catchtouchmove="ture" wx:if="{{congratsGoldFormAgain}}">
   <view class="al">
     <view class="alc-head">
@@ -256,8 +278,8 @@
       </form>
     </view>
   </view>
-</view>
-<!-- 获得银刚笔奖励 -->
+</view> -->
+<!-- 获得银刚笔奖励 
 <view class="mask" catchtouchmove="ture" wx:if="{{congratsSilverFormAgain}}">
   <view class="al">
     <view class="alc-head">
@@ -273,8 +295,8 @@
       </form>
     </view>
   </view>
-</view>
-<!-- 奖品集齐 -->
+</view> -->
+<!-- 奖品集齐 
 <view class="mask" catchtouchmove="ture" wx:if="{{collectCompleteForm}}">
   <view class="al">
     <view class="alc-head">
@@ -289,17 +311,12 @@
       <text>（5元学习津贴已到账）</text>
     </view>
     <view class="alv-btn">
-      <!-- <form bindsubmit="peelGoldFn" report-submit='true'>
-      <button form-type="submit" data-property='silver' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
-        再送一个
-      </button>
-    </form> -->
       <button bindtap='closeForm' class="alc-btn-mai" loading="{{loading}}" disabled="{{disabled}}">
         感谢您对教师节的支持
       </button>
     </view>
   </view>
-</view>
+</view> -->
 <!-- 活动规则 -->
 <view class="mask" catchtouchmove="ture" wx:if="{{ruleForms}}">
   <view class='al'>
