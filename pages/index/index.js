@@ -8,6 +8,7 @@ const app = getApp(),
 let that = null;
 let adUnitId = 'adunit-7f3ec8486b359225'
 const awardTotal = 5
+let shareToken, ownToken
 let notAviliData = { start: '2019/08/14', end: '2019/09/15', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在9月17日24点前完成提现，小程序将于9月18日关闭' };
 const clert = {
   opt: {},
@@ -46,7 +47,6 @@ Page({
     ],
     indexData: {},
     zongziData: {},
-    token: '',
     scissorNum: '',
     goldenNum: '',
     videoAd: null,
@@ -69,7 +69,12 @@ Page({
     // this.clertnoZongziForm();
     // this.clertfreeForm();
   },
-  onLoad: function () {
+  onLoad: function (opt) {
+    if (opt && opt.token) {
+      shareToken = opt.token
+      wx.setStorageSync('shareToken', shareToken)
+      console.log('获取分享的shareToken：' + shareToken)
+    }
     that = this;
     if (this.notAvili(notAviliData)) return
     //获取页面数据
@@ -120,6 +125,8 @@ Page({
         }
       })
     }
+    // 获取自己的分享token
+    this.getOwnTokenFn()
   },
 
   clertFn: function (e) {
@@ -292,52 +299,34 @@ Page({
   },
 
   // 获取token
-  getTokenFn() {
-    let that = this;
-    return new Promise((resolve, reject) => {
-      app.getCode().then(code => function (code) {
-        let _data = {
-          biz: this.data.biz,
-            code: code
-        }
-        console.log('getTokenFn -> ',_data)
-        wx.request({
-          url: `${origin.festival}/front/lottery/sharePage`,
-          method: 'POST',
-          data: _data,
-          header: {
-            'content-type': 'application/x-www-form-urlencoded',
-          },
-          success: function (res) {
-            console.log("/front/lottery/sharePage", res)
-            if (res.data.code == 'A_000000') {
-              // debugger
-              let token = res.data.data;
-              that.setData({
-                token: token
-              })
-              console.log(`token:${token}`)
-              resolve(res.data);
-            } else {
-              wx.showModal({
-                title: '提示',
-                content: res.data.msg,
-                success: function (res) {
-                  if (res.confirm) {
-                    console.log('弹框后点取消')
-                  } else {
-                    console.log('弹框后点取消')
-                  }
-                }
-              })
-              reject(res.data);
-            }
-          },
-          fail: function (error) {
-            console.error('/lottery/lottery', error);
+  getOwnTokenFn() {
+    app.getCode().then(code => {
+      let _data = { biz: this.data.biz, code: code }
+      console.log('getOwnTokenFn 获取自己分享token -> ', _data)
+      wx.request({
+        url: `${origin.festival}/front/lottery/sharePage`,
+        method: 'POST',
+        data: _data,
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        success: function (res) {
+          console.log("getOwnTokenFn 获取自己分享token <- ", res)
+          if (res.data.code == "F_000000") {
+            // debugger
+            ownToken = res.data.data;
+          } else {
+            wx.showModal({
+              title: 'getOwnTokenFn',
+              content: res.data.msg,
+              success: function (res) {
+              }
+            })
             reject(res.data);
           }
-        })
+        },
+        fail: function (error) {
+          console.error('/lottery/lottery', error);
+          reject(res.data);
+        }
       })
     })
   },
@@ -388,14 +377,10 @@ Page({
       icon: 'loading',
       mask: true,
     });
-    let that = this;
-    let getToken = wx.getStorageSync('getToken') || '';
-    if (getToken == '' || getToken == null) {
-      that.getTokenFn()
-    }
+    let that = this
     app.getCode().then((code) => {
       let _data = {
-        biz: this.data.biz, code: code, token: getToken,
+        biz: this.data.biz, code: code, token: shareToken || wx.getStorageSync('shareToken'),
       }
       wx.request({
         url: `${origin.festival}/front/lottery/lottery`,
@@ -406,7 +391,7 @@ Page({
           wx.hideToast();
           that.closeForm()
           let datas = res.data.data;
-          if (res.data.code == 'A_000000') {
+          if (res.data.code == 'F_000000') {
             that.setData({ zongziData: datas })
             that.indexDataFn().then(() => {
               let myZongziLength = that.data.myZongziLength
@@ -608,14 +593,18 @@ Page({
   // 转发分享
   onShareAppMessage: function (res) {
     this.closeForm()
-    let token = this.data.token;
+    if (!ownToken) {
+      this.getOwnTokenFn()
+      return
+    }
+    console.log('onShareAppMessage 分享链接 : ', `pages/index/index?token=${ownToken}`)
     return {
       title: '金钢笔送贺卡得现金红包，提现秒到零钱',
-      path: `pages/index/index?token=${token}`,
+      path: `pages/index/index?token=${ownToken}`,
       imageUrl: '../../images/share.jpg',
       success: function (res) {
         // 转发成功
-        console.log(`pages/index/index?token=${token}`)
+        console.log('onShareAppMessage 已分享 : ', `pages/index/index?token=${ownToken}`)
       }
     }
   },
@@ -702,12 +691,7 @@ Page({
           if (res.data.code === 'F_000000') {
             let cards = res.data.data;
             that.setData({ cards: cards })
-            let addCardTimes = (that.data.indexData.thanksCardAllTimes - that.data.indexData.thanksCardUsedTimes)
-            let addCardLeft = 3 - cards.length;
-            let addCardArrayLength = 0;
-            if (cards && addCardLeft > 0) {
-              addCardArrayLength = addCardTimes > addCardLeft ? addCardLeft : addCardTimes;
-            }
+            let addCardArrayLength = that.data.indexData.thanksCardAllTimes - that.data.indexData.thanksCardUsedTimes
             // 获取添加贺卡数组
             that.setData({ addCardArray: Array(addCardArrayLength) })
           } else {
