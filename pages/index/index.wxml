@@ -171,7 +171,7 @@
   </view>
 </view>
 <!-- 活动规则 -->
-<view class="mask" catchtouchmove="ture" wx:if="{{ruleForms}}">
+<view class="mask" wx:if="{{ruleForms}}">
   <view class='al'>
     <view class='regulation'>
       <view class='ruleTitle'>

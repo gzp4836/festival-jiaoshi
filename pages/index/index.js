@@ -296,13 +296,15 @@ Page({
     let that = this;
     return new Promise((resolve, reject) => {
       app.getCode().then(code => function (code) {
+        let _data = {
+          biz: this.data.biz,
+            code: code
+        }
+        console.log('getTokenFn -> ',_data)
         wx.request({
           url: `${origin.festival}/front/lottery/sharePage`,
           method: 'POST',
-          data: {
-            biz: this.data.biz,
-            code: code
-          },
+          data: _data,
           header: {
             'content-type': 'application/x-www-form-urlencoded',
           },
