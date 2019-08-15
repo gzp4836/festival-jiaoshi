@@ -18,12 +18,13 @@ App({
     // })
   },
 
-  getCode() {
+  getCode(n) {
     return new Promise((resolve, reject) => {
       let beDate = new Date().getTime();
       wx.login({
         success: res => {
-          console.log("getCode耗时：", (new Date().getTime() - beDate) / 1000);
+          n = n || ''
+          console.log(n + " getCode耗时：", (new Date().getTime() - beDate) / 1000, res.code);
           resolve(res.code);
         }
       })
