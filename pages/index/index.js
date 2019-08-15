@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 //获取应用实例
+
 const app = getApp(),
   config = require('../../config'),
   origin = config.origin;
 let that = null;
+let adUnitId = 'adunit-7f3ec8486b359225'
+const awardTotal = 5
+let notAviliData = { start: '2019/08/14', end: '2019/09/15', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在9月17日24点前完成提现，小程序将于9月18日关闭' };
 const clert = {
   opt: {},
   show: function (opt) {
@@ -17,17 +21,29 @@ const clert = {
         opt.btns[i].share = 'share';
       }
     }
+    that.closeForm()
     that.setData({ clert: opt })
   },
   close: function () {
-    that.setData({ clert: { show: false } })
+    that.setData({ clert: { show: false }, noZongziForm: false, noScissorForm: false })
   }
 }
 
 Page({
   data: {
     biz: 'dlbyfgTeacher',
-    awardTotal: 5,
+    imgs: [
+      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-1.png&auth=jC4m+vdm9SCCPz7ghY00kJM67ydhPTg4JmU9MTk2NTc2NTQxNSZ0PTE1NjU3NjU0MTYmZj02N18xOTA4XzcyMl82NDcmcj0wOHlobWNGMkQx'
+
+      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-2.png&auth=7hST5oWG0BPgTKlO66ZpqHBKvNdhPTg4JmU9MTk2NTc2NTQ1OCZ0PTE1NjU3NjU0NTkmZj01MV8xOTA4XzcxOV81NyZyPW12V093V0FQQ1Y='
+
+      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-3.png&auth=ncgyNbn09gRwoZDK+rXZVneu4+BhPTg4JmU9MTk2NTc2NTQ4MSZ0PTE1NjU3NjU0ODImZj00OF8xOTA4XzcyM180OCZyPUlCNEltSGZKdVo='
+
+      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-4.png&auth=ugVy96w8kEDUOGAc+pXMVYoC6TthPTg4JmU9MTk2NTc2NTQ5NiZ0PTE1NjU3NjU0OTcmZj00OF8xOTA4XzcyM181NyZyPUhRcXNoNFVaOEc='
+
+      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-5.png&auth=qFO1yFZS3P4iaBZMP6CjetTQaClhPTg4JmU9MTk2NTc2NTUwNyZ0PTE1NjU3NjU1MDgmZj00MV8xOTA4XzcyMl85MCZyPUVLbGVKcW5IU1E='
+
+    ],
     indexData: {},
     zongziData: {},
     token: '',
@@ -37,11 +53,11 @@ Page({
     ruleForms: false,
     myBalance: 0,
     myZongziArr: [],
+    noScissorForm: false, noZongziForm: false,
     myZongziLength: 0,
     cards: null,
     currentCard: null,
     showCard: false,
-    adUnitId: 'adunit-facea3e23a0fe01f',
     addCardArray: [],
     debug: true,
     clert: {}
@@ -50,23 +66,25 @@ Page({
   },
   onShow: function () {
     // this.clertnoZongziForm();
+    // this.clertnoZongziForm();
+    // this.clertfreeForm();
   },
   onLoad: function () {
     that = this;
-    if (this.notAvili({ start: '2019/07/10', end: '2019/08/15', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在8月12日24点前完成提现，小程序将于8月13日关闭' })) return
+    if (this.notAvili(notAviliData)) return
     //获取页面数据
-    this.indexDataFn();
+    this.indexDataFn()
     //视屏
     if (wx.createRewardedVideoAd) {
       // 加载激励视频广告
-      this.data.videoAd = wx.createRewardedVideoAd({ adUnitId: this.adUnitId })
+      this.data.videoAd = wx.createRewardedVideoAd({ adUnitId: adUnitId })
       //捕捉错误
       this.data.videoAd.onError(err => { })
       // 监听关闭
       this.data.videoAd.onClose((status) => {
         // 正常播放结束，下发奖励
         if (status && status.isEnded || status === undefined) {
-          clert.close();
+          that.closeForm()
           app.getCode().then((code) => {
             let _data = { biz: that.data.biz, code: code }
             wx.request({
@@ -109,23 +127,30 @@ Page({
     let fn = clert.opt[e.currentTarget.dataset.fn];
     fn ? fn() : that[fnName]();
   },
+  closeForm() {
+    clert.close()
+  },
   clertnoZongziForm() {
-    clert.show({
-      content: '将贺卡送给两名好友，两名好友成功送出贺卡，即可获得一个新礼盒。',
-      title: '',
-      btns: [{ btnTxt: "送贺卡", class: "alc-btn-mai", fn: "share" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
-      closeForm() { clert.close() }
-    })
+    this.closeForm()
+    this.setData({ noZongziForm: true })
+    // clert.show({
+    //   content: '将贺卡送给两名好友，两名好友成功送出贺卡，即可获得一个新贺卡。',
+    //   title: '',
+    //   btns: [{ btnTxt: "送贺卡", class: "alc-btn-mai", fn: "share" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
+    // })
+  },
+  clertnoScissorForm() {
+    this.closeForm()
+    that.setData({ noScissorForm: true })
   },
   clertfreeForm() {
     clert.show({
-      content: '只需1分押金，即可送花一次，送出后自动退款（退款需24小时）',
+      content: '只需1分押金，即可获得金刚笔，用金钢笔得现金红包（押金24小时退款）',
       title: '',
       btns: [{ btnTxt: "送花", class: "alc-btn-mai", fn: "getGoldFn" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
       getGoldFn: function () {
         wx.navigateTo({ url: '../pay/pay' })
-      },
-      closeForm() { clert.close() }
+      }
     })
   },
   clertnoSilverForms() {
@@ -165,15 +190,12 @@ Page({
   },
   clertcollectCompleteForm() {
     clert.show({
-      content: '新竹高于旧竹枝，\n 全凭老干为扶持。\n 下年再有新生者，\n 十丈龙孙绕凤池。',
+      content: '新竹高于旧竹枝，\n 全凭老干为扶持。\n 下年再有新生者，\n 十丈龙孙绕凤池。\n（5元学习津贴已到账）',
       title: '',
-      btns: [{ btnTxt: "感谢您对教师节的支持", class: "alc-btn-mai", fn: "closeForm" }],
-      closeForm() { clert.close() }
+      btns: [{ btnTxt: "感谢您对教师节的支持", class: "alc-btn-mai", fn: "closeForm" }]
     })
   },
-  clertnoScissorForm() {
-    that.setData({ noScissorForm: true })
-  },
+
 
   // 活动结束
   notAvili(opt) {
@@ -199,6 +221,11 @@ Page({
 
   // 获取首页数据
   indexDataFn() {
+    wx.showToast({
+      title: '',
+      icon: 'loading',
+      mask: true,
+    });
     return new Promise((resolve, reject) => {
       app.getCode().then(code => {
         let that = this;
@@ -213,6 +240,7 @@ Page({
           },
           data: _data,
           success: function (res) {
+
             if (that.data.debug) console.log("indexDataFn 获取首页数据<-", (new Date().getTime() - _t) / 1000, res)
             if (res.data.code === 'F_000000') {
               let datas = res.data.data;
@@ -239,6 +267,7 @@ Page({
                 myZongziArr: myZongziArr,
                 myZongziLength: myZongziLength
               })
+              wx.hideToast();
               // 获取已填写好的贺卡
               that.getCardList()
               resolve(myZongziLength);
@@ -313,9 +342,7 @@ Page({
 
   // 顶部点击粽子
   openFn() {
-    if (this.notAvili({ start: '2019/07/10', end: '2019/08/10', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在8月12日24点前完成提现，小程序将于8月13日关闭' })) {
-      return
-    }
+    if (this.notAvili(notAviliData)) return
     let goldenScissorCount = this.data.indexData.goldenScissorCount,
       notOpen = this.data.indexData.notOpen,
       silverScissorCount = this.data.indexData.silverScissorCount,
@@ -353,9 +380,7 @@ Page({
 
   // 剥粽子
   peelGoldFn(e) {
-    if (this.notAvili({ start: '2019/07/10', end: '2019/08/10', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在8月12日24点前完成提现，小程序将于8月13日关闭' })) {
-      return
-    }
+    if (this.notAvili(notAviliData)) return
     wx.showToast({
       title: '',
       icon: 'loading',
@@ -366,10 +391,10 @@ Page({
     if (getToken == '' || getToken == null) {
       that.getTokenFn()
     }
-    let _data = {
-      biz: this.data.biz, code: code, token: getToken,
-    }
     app.getCode().then((code) => {
+      let _data = {
+        biz: this.data.biz, code: code, token: getToken,
+      }
       wx.request({
         url: `${origin.festival}/front/lottery/lottery`,
         method: 'POST',
@@ -377,20 +402,20 @@ Page({
         header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: function (res) {
           wx.hideToast();
-          clert.close();
+          that.closeForm()
           let datas = res.data.data;
           if (res.data.code == 'A_000000') {
             that.setData({ zongziData: datas })
             that.indexDataFn().then(() => {
               let myZongziLength = that.data.myZongziLength
               //未集齐8种
-              if (myZongziLength.length < that.data.awardTotal) {
+              if (myZongziLength.length < awardTotal) {
                 //银剪刀
                 if (datas.bonus == '' || datas.bonus == undefined || datas.bonus == null) {
-                  clertcongratsSilverFormAgain()
+                  that.clertcongratsSilverFormAgain()
                 } else {
                   //金剪刀
-                  clertcongratsGoldFormAgain();
+                  that.clertcongratsGoldFormAgain();
                 }
               } else {
                 //集齐8种
@@ -400,8 +425,7 @@ Page({
             })
           } else if (res.data.code == 'Z001') {
             //没有粽子
-            this.clertnoZongziForm()
-
+            that.clertnoZongziForm()
           } else if (res.data.code == 'Z002') {
             //没有剪刀
             that.clertnoScissorForm()
@@ -421,9 +445,6 @@ Page({
         }
       });
     })
-
-
-
     if (e) {
       let formId = e.detail.formId;
       this.fromidFn(formId)
@@ -442,9 +463,7 @@ Page({
 
   // 没剪刀打开弹窗
   // openScissorForm() {
-  //   if (this.notAvili({ start: '2019/07/10', end: '2019/08/10', beTitle: '', beContent: '活动未开始', afTitle: '活动已结束', afContent: '请您在8月12日24点前完成提现，小程序将于8月13日关闭' })) {
-  //     return
-  //   }
+  // if(this.notAvili(notAviliData) return
   //   let goldenScissorCount = this.data.indexData.goldenScissorCount,
   //     silverScissorCount = this.data.indexData.silverScissorCount;
   //   if (goldenScissorCount <= 0 && silverScissorCount <= 0) {
@@ -454,9 +473,11 @@ Page({
 
   // 兑换红包
   pickUpRewardFn() {
-    if (this.notAvili({ start: '2019/06/01', end: '2019/08/12', beTitle: '', beContent: '活动未开始', afTitle: '兑换功能已关闭', afContent: '请您在8月12日24点前完成提现，小程序将于8月13日关闭' })) {
-      return
-    };
+    let _notAviliData = notAviliData
+    _notAviliData.end = '2019/9/16'
+    _notAviliData.afTitle = '兑换功能已关闭'
+    _notAviliData.afContent = '请您在9月17日24点前完成提现，小程序将于9月18日关闭'
+    if (this.notAvili(_notAviliData)) return
     app.getCode().then((code) => {
       let that = this;
       wx.request({
@@ -494,9 +515,11 @@ Page({
 
   // 提现
   withDrawFn(e) {
-    if (this.notAvili({ start: '2019/06/01', end: '2019/08/13', beTitle: '', beContent: '活动未开始', afTitle: '提现功能已关闭', afContent: '感谢您对七夕节的支持' })) {
-      return
-    }
+    let _notAviliData = notAviliData
+    _notAviliData.end = '2019/9/18'
+    _notAviliData.afTitle = '提现功能已关闭'
+    _notAviliData.afContent = '感谢您对教师节的支持'
+    if (this.notAvili(_notAviliData)) return
     let formId = e.detail.formId, that = this;
     wx.showToast({
       title: '请稍候...',
@@ -511,6 +534,7 @@ Page({
         header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: function (res) {
           console.log("/front/duolabao/duoLaBaoWithDraw", res)
+          wx.hideToast();
           let datas = res.data.data,
             stateCode = res.data.code;
           if (res.data.code === 'A_000000') {
@@ -520,7 +544,6 @@ Page({
               content: '提现成功，请到微信零钱查看',
               showCancel: false,
               success: function (res) {
-                wx.hideToast();
                 console.log(res.confirm)
               }
             })
@@ -530,7 +553,7 @@ Page({
               content: '微信规定小程序每日发奖上限30万元，今日额度已用尽，您可在24点微信更新额度后正常提现。',
               showCancel: false,
               success: function (res) {
-                consolo.log(res.confirm)
+                console.log(res.confirm)
               }
             })
           } else if (stateCode == 'A_000002' || stateCode == 'Z009' || stateCode == 'Z005' || stateCode == 'Z010' || stateCode == 'Z011') {
@@ -539,7 +562,7 @@ Page({
               content: res.data.msg,
               showCancel: false,
               success: function (res) {
-                consolo.log(res.confirm)
+                console.log(res.confirm)
               }
             })
           } else {
@@ -548,7 +571,7 @@ Page({
               content: '请稍后再试',
               showCancel: false,
               success: function (res) {
-                consolo.log(res.confirm)
+                console.log(res.confirm)
               }
             })
           }
@@ -582,10 +605,10 @@ Page({
 
   // 转发分享
   onShareAppMessage: function (res) {
-    clert.close();
+    this.closeForm()
     let token = this.data.token;
     return {
-      title: '金剪刀赢现金红包，提现秒到零钱',
+      title: '金钢笔送贺卡得现金红包，提现秒到零钱',
       path: `pages/index/index?token=${token}`,
       imageUrl: '../../images/share.jpg',
       success: function (res) {
@@ -622,15 +645,15 @@ Page({
   },
   // 保存贺卡
   saveCard(e) {
+    let _data = e.detail.value;
+    if (!_data.name || !_data.school || !_data.content || !_data.teacherPhone) {
+      wx.showToast({
+        title: '必须全部填写哦',
+        icon: 'none',
+      })
+      return;
+    }
     app.getCode().then(code => {
-      let _data = e.detail.value;
-      if (!_data.name || !_data.school || !_data.content || !_data.teacherPhone) {
-        wx.showToast({
-          title: '必须全部填写哦',
-          icon: 'none',
-        })
-        return;
-      }
       _data.code = code;
       _data.biz = this.data.biz
       let _this = this
@@ -649,6 +672,7 @@ Page({
           if (res.data.code === 'F_000000') {
             _this.toggleCard();
             _this.indexDataFn();
+            // this.getCardList()
           } else {
             wx.showModal({
               title: 'saveCard',

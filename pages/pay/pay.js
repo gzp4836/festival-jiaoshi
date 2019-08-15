@@ -9,7 +9,7 @@ Page({
   onLoad: function () {
  
     app.getCode().then((code) => {
-      let webUrl =`https://pb.jd.com/activity/2019/duolabao/html/index.html?from=dlb&appId=${code}`;
+      let webUrl =`https://pb.jd.com/activity/2019/duolabao/html/index.html?biz=dlbyfgTeacher&appId=${code}`;
       
      
       console.log(webUrl)

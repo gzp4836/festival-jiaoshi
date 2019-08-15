@@ -104,13 +104,13 @@
 }
 .award {
   position: relative;
-  height: 305rpx;
+  height: 274rpx;
   margin-top: 54rpx;
 }
 .award-bg {
   margin-left: 26rpx;
   width: 698rpx;
-  height: 305rpx;
+  height: 274rpx;
 }
 .award-title {
   position: absolute;
@@ -157,11 +157,16 @@
   text-align: center;
 }
 .award-item-txt {
+  width: 105rpx;
+  height: 38rpx;
   display: block;
   font-size: 28rpx;
-
   color: #ff676e;
   margin-top: 20rpx;
+}
+.award-item-txt-none{
+  background-color: #ff9095;
+  border-radius: 28rpx;
 }
 .yu {
   position: relative;
@@ -358,7 +363,7 @@
   color: #ff5c28;
   font-size: 30rpx;
 }
-.alv-btn {
+.alv-btn:last-child {
   margin-bottom: 58rpx;
 }
 .alv-btn-mai {
@@ -496,6 +501,7 @@
   border-radius: 20rpx;
 }
 .rule {
+  margin-top: 26rpx;
   font-size: 30rpx;
   color: #035239;
   margin-bottom: 40rpx;
