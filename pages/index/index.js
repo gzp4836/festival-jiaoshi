@@ -33,17 +33,11 @@ const clert = {
 Page({
   data: {
     biz: 'dlbyfgTeacher',
-    imgs: [
-      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-1.png&auth=jC4m+vdm9SCCPz7ghY00kJM67ydhPTg4JmU9MTk2NTc2NTQxNSZ0PTE1NjU3NjU0MTYmZj02N18xOTA4XzcyMl82NDcmcj0wOHlobWNGMkQx'
-
-      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-2.png&auth=7hST5oWG0BPgTKlO66ZpqHBKvNdhPTg4JmU9MTk2NTc2NTQ1OCZ0PTE1NjU3NjU0NTkmZj01MV8xOTA4XzcxOV81NyZyPW12V093V0FQQ1Y='
-
-      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-3.png&auth=ncgyNbn09gRwoZDK+rXZVneu4+BhPTg4JmU9MTk2NTc2NTQ4MSZ0PTE1NjU3NjU0ODImZj00OF8xOTA4XzcyM180OCZyPUlCNEltSGZKdVo='
-
-      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-4.png&auth=ugVy96w8kEDUOGAc+pXMVYoC6TthPTg4JmU9MTk2NTc2NTQ5NiZ0PTE1NjU3NjU0OTcmZj00OF8xOTA4XzcyM181NyZyPUhRcXNoNFVaOEc='
-
-      , 'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-5.png&auth=qFO1yFZS3P4iaBZMP6CjetTQaClhPTg4JmU9MTk2NTc2NTUwNyZ0PTE1NjU3NjU1MDgmZj00MV8xOTA4XzcyMl85MCZyPUVLbGVKcW5IU1E='
-
+    imgs: ['https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-1.png&auth=jC4m+vdm9SCCPz7ghY00kJM67ydhPTg4JmU9MTk2NTc2NTQxNSZ0PTE1NjU3NjU0MTYmZj02N18xOTA4XzcyMl82NDcmcj0wOHlobWNGMkQx',
+      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-2.png&auth=7hST5oWG0BPgTKlO66ZpqHBKvNdhPTg4JmU9MTk2NTc2NTQ1OCZ0PTE1NjU3NjU0NTkmZj01MV8xOTA4XzcxOV81NyZyPW12V093V0FQQ1Y=',
+      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-3.png&auth=ncgyNbn09gRwoZDK+rXZVneu4+BhPTg4JmU9MTk2NTc2NTQ4MSZ0PTE1NjU3NjU0ODImZj00OF8xOTA4XzcyM180OCZyPUlCNEltSGZKdVo=',
+      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-4.png&auth=ugVy96w8kEDUOGAc+pXMVYoC6TthPTg4JmU9MTk2NTc2NTQ5NiZ0PTE1NjU3NjU0OTcmZj00OF8xOTA4XzcyM181NyZyPUhRcXNoNFVaOEc=',
+      'https://hsp.jdpay.com/?appid=88&filepath=/front/award-item-5.png&auth=qFO1yFZS3P4iaBZMP6CjetTQaClhPTg4JmU9MTk2NTc2NTUwNyZ0PTE1NjU3NjU1MDgmZj00MV8xOTA4XzcyMl85MCZyPUVLbGVKcW5IU1E='
     ],
     indexData: {},
     zongziData: {},
@@ -73,7 +67,7 @@ Page({
     if (opt && opt.token) {
       shareToken = opt.token
       wx.setStorageSync('shareToken', shareToken)
-      console.log('获取分享的shareToken：' + shareToken)
+      console.log('shareToken 获取分享的 ：' + shareToken)
     }
     that = this;
     if (this.notAvili(notAviliData)) return
@@ -140,11 +134,6 @@ Page({
   clertnoZongziForm() {
     this.closeForm()
     this.setData({ noZongziForm: true })
-    // clert.show({
-    //   content: '将贺卡送给两名好友，两名好友成功送出贺卡，即可获得一个新贺卡。',
-    //   title: '',
-    //   btns: [{ btnTxt: "送贺卡", class: "alc-btn-mai", fn: "share" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
-    // })
   },
   clertnoScissorForm() {
     this.closeForm()
@@ -154,7 +143,7 @@ Page({
     clert.show({
       content: '只需1分押金，即可获得金刚笔，用金钢笔得现金红包（押金24小时退款）',
       title: '',
-      btns: [{ btnTxt: "送花", class: "alc-btn-mai", fn: "getGoldFn" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
+      btns: [{ btnTxt: "使用金刚笔", class: "alc-btn-mai", fn: "getGoldFn" }, { btnTxt: '放弃', class: 'alc-btn-sec', fn: 'closeForm' }],
       getGoldFn: function () {
         wx.navigateTo({ url: '../pay/pay' })
       }
@@ -247,7 +236,6 @@ Page({
           },
           data: _data,
           success: function (res) {
-
             if (that.data.debug) console.log("indexDataFn 获取首页数据<-", (new Date().getTime() - _t) / 1000, res)
             if (res.data.code === 'F_000000') {
               let datas = res.data.data;
@@ -280,7 +268,7 @@ Page({
               resolve(myZongziLength);
             } else {
               wx.showModal({
-                title: 'indexDataFn',
+                title: '提示',
                 content: res.data.msg,
                 success: function (res) {
                   console.log(res.confirm);
@@ -355,7 +343,6 @@ Page({
   goldFn(e) {
     let formId = e.detail.formId;
     this.fromidFn(formId)
-    console.log('金剪刀formid' + e.detail.formId)
     let goldenScissorCount = this.data.indexData.goldenScissorCount;
     if (goldenScissorCount <= 0) {
       this.clertfreeForm();
@@ -379,15 +366,15 @@ Page({
     });
     let that = this
     app.getCode().then((code) => {
-      let _data = {
-        biz: this.data.biz, code: code, token: shareToken || wx.getStorageSync('shareToken'),
-      }
+      let _data = { biz: this.data.biz, code: code, token: shareToken || wx.getStorageSync('shareToken') }
+      console.log("peelGoldFn 剥粽子 -> ", _data)
       wx.request({
         url: `${origin.festival}/front/lottery/lottery`,
         method: 'POST',
         data: _data,
         header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: function (res) {
+          console.log("peelGoldFn 剥粽子 <- ", res)
           wx.hideToast();
           that.closeForm()
           let datas = res.data.data;
@@ -428,7 +415,6 @@ Page({
         },
         fail: function (error) {
           wx.hideToast();
-          console.error('/lottery/lottery', error);
         }
       });
     })
@@ -466,19 +452,16 @@ Page({
     _notAviliData.afContent = '请您在9月17日24点前完成提现，小程序将于9月18日关闭'
     if (this.notAvili(_notAviliData)) return
     app.getCode().then((code) => {
-      let that = this;
+      let that = this
+      let _data = { biz: this.data.biz, code: code }
+      console.log('pickUpRewardFn 兑换红包 -> ', _data)
       wx.request({
         url: `${origin.festival}/front/lottery/pickUpReward`,
         method: 'POST',
-        data: {
-          biz: this.data.biz,
-          code: code
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded',
-        },
+        data: _data,
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: function (res) {
-          console.log("/front/lottery/pickUpReward", res)
+          console.log('pickUpRewardFn 兑换红包 <- ', res)
           let datas = res.data.data;
           if (res.data.success == true) {
             that.indexDataFn()
@@ -494,7 +477,7 @@ Page({
           }
         },
         fail: function (error) {
-          console.error('/lottery/pickUpReward', error);
+          console.log('pickUpRewardFn 兑换红包 <- ', error)
         }
       })
     })
@@ -514,17 +497,19 @@ Page({
       mask: true
     });
     app.getCode().then((code) => {
+      let _data = { biz: this.data.biz, code: code }
+      console.log('withDrawFn 提现 -> ', _data)
       wx.request({
         url: `${origin.festival}/front/duolabao/duoLaBaoWithDraw`,
         method: 'POST',
-        data: { biz: this.data.biz, code: code },
+        data: _data,
         header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: function (res) {
-          console.log("/front/duolabao/duoLaBaoWithDraw", res)
+          console.log('withDrawFn 提现 <- ', res)
           wx.hideToast();
           let datas = res.data.data,
             stateCode = res.data.code;
-          if (res.data.code === 'A_000000') {
+          if (res.data.code === 'F_000000') {
             that.indexDataFn()
             wx.showModal({
               title: '提示',
@@ -565,7 +550,7 @@ Page({
         },
         fail: function (error) {
           wx.hideToast();
-          console.error('/duolabao/duoLaBaoWithDraw', error);
+          console.log('withDrawFn 提现 <- ', error)
         }
       })
     })
@@ -597,14 +582,14 @@ Page({
       this.getOwnTokenFn()
       return
     }
-    console.log('onShareAppMessage 分享链接 : ', `pages/index/index?token=${ownToken}`)
+    console.log('onShareAppMessage 即将分享 : ', `pages/index/index?token=${ownToken}`)
     return {
       title: '金钢笔送贺卡得现金红包，提现秒到零钱',
       path: `pages/index/index?token=${ownToken}`,
       imageUrl: '../../images/share.jpg',
       success: function (res) {
         // 转发成功
-        console.log('onShareAppMessage 已分享 : ', `pages/index/index?token=${ownToken}`)
+        console.log('onShareAppMessage 分享成功 : ', `pages/index/index?token=${ownToken}`)
       }
     }
   },
@@ -630,10 +615,12 @@ Page({
       envVersion: 'release',
     });
   },
+
   // 关闭贺卡
   toggleCard() {
     this.setData({ showCard: !this.data.showCard })
   },
+
   // 保存贺卡
   saveCard(e) {
     let _data = e.detail.value;
@@ -654,12 +641,12 @@ Page({
         _data.key = _key;
         _url = `${origin.festival}/front/duolabao/TeachersDay/update`
       }
-      console.log("保存贺卡 saveCard -> ", _data);
+      console.log("saveCard 保存贺卡 -> ", _data);
       wx.request({
         url: _url,
         data: _data,
         success: function (res) {
-          console.log("保存贺卡 saveCard <- ", res);
+          console.log("saveCard 保存贺卡 <- ", res);
           if (res.data.code === 'F_000000') {
             _this.toggleCard();
             _this.indexDataFn();
@@ -677,17 +664,18 @@ Page({
       })
     })
   },
+
   // 查询贺卡列表
   getCardList() {
     app.getCode().then((code) => {
       let _data = { code: code, biz: this.data.biz }, that = this;
-      if (this.data.debug) console.log("获取贺卡列表 getCardList -> ", _data);
+      if (this.data.debug) console.log("getCardList 获取贺卡列表 -> ", _data);
       let _t = new Date().getTime();
       wx.request({
         url: `${origin.festival}/front/duolabao/TeachersDay/queryList`,
         data: _data,
         success: function (res) {
-          if (that.data.debug) console.log("获取贺卡列表 getCardList <- ", (new Date().getTime() - _t) / 1000, res);
+          if (that.data.debug) console.log("getCardList 获取贺卡列表 <- ", (new Date().getTime() - _t) / 1000, res);
           if (res.data.code === 'F_000000') {
             let cards = res.data.data;
             that.setData({ cards: cards })
@@ -701,6 +689,7 @@ Page({
       })
     })
   },
+
   // 贺卡详情
   getCardDetail(e) {
     let index = e.currentTarget.dataset.index;
